@@ -1,5 +1,6 @@
 package model;
 
+import com.amazonaws.auth.InstanceProfileCredentialsProvider;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -7,19 +8,33 @@ import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.services.s3.model.Bucket;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 public class s3Client {
 
             public static AmazonS3 gets3Client(){
-                final AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
-                        .withRegion("us-east-2")
-                        .build();
-//                BasicAWSCredentials creds = new BasicAWSCredentials(accessKey, secretKey);
-//                AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
+//                final AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
 //                        .withRegion("us-east-2")
-//                        .withCredentials(new AWSStaticCredentialsProvider(creds)).build();
+//                        .withCredentials(new InstanceProfileCredentialsProvider(false))
+//                        .build();
+                Properties p = new Properties( );
+                try {
+                    p.load( new FileInputStream( new File("/tmp/credentials")));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                String accessKey = p.getProperty("aws_access_key_id");
+                String secretKey = p.getProperty("aws_secret_access_key");
+
+                BasicAWSCredentials creds = new BasicAWSCredentials(accessKey, secretKey);
+                AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
+                        .withRegion("us-east-2")
+                        .withCredentials(new AWSStaticCredentialsProvider(creds)).build();
 
                 return s3Client;
             }
