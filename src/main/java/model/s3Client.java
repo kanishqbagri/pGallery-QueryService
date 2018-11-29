@@ -12,15 +12,14 @@ import java.util.List;
 
 public class s3Client {
 
-            public static String accessKey="AKIAJPGXPPELM6QALT4Q";
-            public static String secretKey="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";
-
             public static AmazonS3 gets3Client(){
-
-                BasicAWSCredentials creds = new BasicAWSCredentials(accessKey, secretKey);
-                AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
+                final AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
                         .withRegion("us-east-2")
-                        .withCredentials(new AWSStaticCredentialsProvider(creds)).build();
+                        .build();
+//                BasicAWSCredentials creds = new BasicAWSCredentials(accessKey, secretKey);
+//                AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
+//                        .withRegion("us-east-2")
+//                        .withCredentials(new AWSStaticCredentialsProvider(creds)).build();
 
                 return s3Client;
             }
@@ -55,5 +54,21 @@ public class s3Client {
                 }
 
             return bucketList;
+        }
+        public static void test(){
+            AmazonS3 client = gets3Client();
+            ArrayList<String> bucketList= new ArrayList<>();
+            String s3BaseUrl = "https://s3.us-east-2.amazonaws.com/photo-journal/";
+            //List of Objects in a bucket
+            String prefix = "static/img_t/" + "kids";
+            List<S3ObjectSummary> s3objects = client.listObjects("photo-journal",prefix).getObjectSummaries();
+
+            System.out.println("Your Amazon Concerts objects are:");
+            for (S3ObjectSummary a : s3objects)
+            {
+                System.out.println("* " + a.getKey());
+                bucketList.add(s3BaseUrl + a.getKey());
+            }
+
         }
 }
