@@ -1,5 +1,6 @@
 package com.pGallery.pGalleryqueryService;
 
+import com.amazonaws.services.s3.AmazonS3;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -8,6 +9,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.bind.annotation.PathVariable;
 import service.ImageService;
 import model.Image;
+import model.s3Client;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -82,6 +84,10 @@ public class ImageResource {
                 Files.write(path, bytes);
                 status="Successful";
                 message="Upload Successful";
+
+                //Write to S3 myuploads bucket
+                s3Client.putObjectsInBucket(file.getOriginalFilename(), UPLOAD_FOLDER);
+
 
             } catch (IOException e) {
                 e.printStackTrace();
