@@ -80,7 +80,7 @@ public class s3Client {
 
         public static void putObjectsInBucket(String file, String filePath){
 
-                AmazonS3 client =gets3Client();
+                AmazonS3 s3Client =gets3Client();
                 String clientRegion = "us-east-2";
                 String bucketName = "photo-journal/static/img_t/myuploads";
                 String stringObjKeyName = file;
@@ -88,11 +88,6 @@ public class s3Client {
                 String fileName = filePath;
 
             try {
-                AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
-                        .withRegion(clientRegion)
-                        .withCredentials(new ProfileCredentialsProvider())
-                        .build();
-
                 // Upload a text string as a new object.
                 s3Client.putObject(bucketName, stringObjKeyName, "Uploaded String Object");
 
