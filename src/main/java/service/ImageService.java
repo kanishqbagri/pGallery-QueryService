@@ -51,6 +51,10 @@ public class ImageService {
                 String [] papa_journey = s3Client.getObjectsFromBucket("papa_journey").toArray(new String[0]);
                 categoryArray=papa_journey;
                 break;
+            case "myuploads":
+                String [] myuploads=s3Client.getObjectsFromBucket("myuploads").toArray(new String[0]);
+                categoryArray=myuploads;
+                break;
 
             default :
                 System.out.println("Invalid Selection");
