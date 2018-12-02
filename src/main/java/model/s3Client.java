@@ -82,7 +82,7 @@ public class s3Client {
 
                 AmazonS3 client =gets3Client();
                 String clientRegion = "us-east-2";
-                String bucketName = "myuploads";
+                String bucketName = "photo-journal/static/img_t/myuploads";
                 String stringObjKeyName = file;
                 String fileObjKeyName = file;
                 String fileName = filePath;
@@ -100,7 +100,7 @@ public class s3Client {
                 PutObjectRequest request = new PutObjectRequest(bucketName, fileObjKeyName, new File(fileName));
                 ObjectMetadata metadata = new ObjectMetadata();
                 metadata.setContentType("multipart/form-data");
-                metadata.addUserMetadata("x-amz-meta-title", "someTitle");
+//                metadata.addUserMetadata("x-amz-meta-title", "someTitle");
                 request.setMetadata(metadata);
                 s3Client.putObject(request);
             }
