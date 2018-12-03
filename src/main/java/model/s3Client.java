@@ -14,6 +14,8 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.transfer.TransferManager;
+import com.amazonaws.services.s3.transfer.TransferManagerBuilder;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -78,26 +80,34 @@ public class s3Client {
             return bucketList;
         }
 
-        public static void putObjectsInBucket(String file, String filePath){
+        public static void putObjectsInBucket(String fileName, String filePath){
 
                 AmazonS3 s3Client =gets3Client();
                 String clientRegion = "us-east-2";
                 String bucketName = "photo-journal/static/img_t/myuploads";
-                String stringObjKeyName = file;
-                String fileObjKeyName = file;
-                String fileName = filePath;
+                //String stringObjKeyName = fileName;
+                String fileObjKeyName = fileName;
+                //String fileName = filePath;
+
+            File file = new File(filePath);
+            long contentLength = file.length();
+            long partSize = 5 * 1024 * 1024; // Set part size to 5 MB.
+
 
             try {
                 // Upload a text string as a new object.
-                s3Client.putObject(bucketName, stringObjKeyName, "Uploaded String Object");
-
+                //s3Client.putObject(bucketName, stringObjKeyName, "Uploaded String Object");
+                File fileP = new File(filePath);
                 // Upload a file as a new object with ContentType and title specified.
-                PutObjectRequest request = new PutObjectRequest(bucketName, fileObjKeyName, new File(fileName));
+                PutObjectRequest request = new PutObjectRequest(bucketName, fileObjKeyName, fileP);
                 ObjectMetadata metadata = new ObjectMetadata();
-                metadata.setContentType("multipart/form-data");
+                //metadata.setContentType("multipart/form-data");
+                metadata.setContentType("plain/text");
 //                metadata.addUserMetadata("x-amz-meta-title", "someTitle");
                 request.setMetadata(metadata);
+                System.out.println("In the Put method. for upload" + request);
                 s3Client.putObject(request);
+
             }
             catch(AmazonServiceException e) {
                 // The call was transmitted successfully, but Amazon S3 couldn't process

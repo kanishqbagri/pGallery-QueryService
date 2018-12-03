@@ -86,7 +86,7 @@ public class ImageResource {
                 message="Upload Successful";
 
                 //Write to S3 myuploads bucket
-                s3Client.putObjectsInBucket(file.getOriginalFilename(), UPLOAD_FOLDER);
+                s3Client.putObjectsInBucket(file.getOriginalFilename(), path.toString());
 
 
             } catch (IOException e) {
